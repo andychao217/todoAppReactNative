@@ -11,6 +11,12 @@ const TabNavigator = createBottomTabNavigator(
         Complete: todoApp
     },
     {
+        defaultNavigationOptions: ({ navigation }) => ({
+            tabBarOnPress: (scene,jumpToIndex) => {
+                console.log(scene); 
+                navigation.navigate(scene.state.routeName)
+            },
+        }),
         tabBarOptions: {
             activeTintColor: 'tomato',
             inactiveTintColor: 'gray',
