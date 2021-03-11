@@ -6,7 +6,6 @@ import TextInput from './components/textInput';
 import SubmitButton from './components/SubmitButton';
 import TodoList from './components/todoList';
 
-
 class todoApp extends PureComponent {
 	state = {
 		inputValue: '',
@@ -66,25 +65,28 @@ class todoApp extends PureComponent {
 	async componentDidMount() {
 		const { navigation, screenProps } = this.props;
 		const _this = this;
+
+		async function getData(){
+			try {
+				let todoList = await AsyncStorage.getItem('todoList');
+				todoList = JSON.parse(todoList);
+				if (todoList && todoList.length) {
+					_this.setState({ todoList });
+				}
+				let type = await AsyncStorage.getItem('type');
+				if (type) {
+					_this.setType(type);
+				}
+			} catch (e) {
+				console.log('Error from AsyncStorage: ', e);
+			}
+		}
+		
+		getData();
+		
 		const didFocusSubscription = navigation.addListener(
 			'didFocus',
 			payload => {
-				const routeName = JSON.stringify(payload.state.routeName);
-				async function getData(){
-					try {
-						let todoList = await AsyncStorage.getItem('todoList');
-						todoList = JSON.parse(todoList);
-						if (todoList && todoList.length) {
-							_this.setState({ todoList });
-						}
-						let type = await AsyncStorage.getItem('type');
-						if (type) {
-							_this.setType(type);
-						}
-					} catch (e) {
-						console.log('Error from AsyncStorage: ', e);
-					}
-				}
 				getData();
 			}
 		);
