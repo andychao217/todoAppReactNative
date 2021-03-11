@@ -1,9 +1,10 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React,  { PureComponent } from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import AsyncStorage from '@react-native-community/async-storage';
 import todoApp from './todoApp';
 
+let todoIndex = 0;
 const TabNavigator = createBottomTabNavigator(
     {
         All: todoApp,
@@ -12,16 +13,27 @@ const TabNavigator = createBottomTabNavigator(
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
-            tabBarOnPress: (scene,jumpToIndex) => {
-                console.log(scene); 
-                navigation.navigate(scene.state.routeName)
+            tabBarOnPress: (scene) => {
+                const routeName = navigation.state.routeName;
+                AsyncStorage.setItem('type', routeName);
+                navigation.navigate(navigation.state.routeName, {
+                    routeName,
+                });
             },
         }),
         tabBarOptions: {
             activeTintColor: 'tomato',
-            inactiveTintColor: 'gray',
+            inactiveTintColor: 'lightgray',
         },
     }
 );
 
-export default createAppContainer(TabNavigator);
+const AppContainer = createAppContainer(TabNavigator);
+	
+export default class App extends PureComponent{
+    render() {
+		return (
+			<AppContainer />
+        )
+    }
+}

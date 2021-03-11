@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Heading from './components/heading';
 import TextInput from './components/textInput';
 import SubmitButton from './components/SubmitButton';
 import TodoList from './components/todoList';
-import TabBar from './components/tabBar';
 
-let todoIndex = 0;
+
 class todoApp extends PureComponent {
 	state = {
 		inputValue: '',
@@ -24,23 +24,26 @@ class todoApp extends PureComponent {
 			//判断inputValue是否为空或者仅包含空格
 			return;
 		}
+		let todoIndex = Math.floor((Math.random()*10000)+1) + new Date();
 		const todo = {
 			title: this.state.inputValue,
 			todoIndex,
 			complete: false,
 		};
-		todoIndex++;
 		const todoList = [...this.state.todoList, todo];
 		this.setState({
 			todoList,
 			inputValue: '',
 		});
+		AsyncStorage.setItem('todoList', JSON.stringify(todoList));
 	}
 
 	deleteTodo(index) {
 		let { todoList } = this.state;
 		todoList = todoList.filter((todo) => todo.todoIndex !== index);
 		this.setState({ todoList });
+		AsyncStorage.setItem('todoList', JSON.stringify(todoList));
+		this.forceUpdate();
 	}
 
 	toggleComplete(index) {
@@ -51,15 +54,46 @@ class todoApp extends PureComponent {
 			}
 		});
 		this.setState({ todoList });
+		AsyncStorage.setItem('todoList', JSON.stringify(todoList));
 		this.forceUpdate();
 	}
 
-	setType(type) {
+	setType(type = 'All') {
 		this.setState({ type });
+		this.forceUpdate();
+	}
+
+	async componentDidMount() {
+		const { navigation, screenProps } = this.props;
+		const _this = this;
+		const didFocusSubscription = navigation.addListener(
+			'didFocus',
+			payload => {
+				const routeName = JSON.stringify(payload.state.routeName);
+				async function getData(){
+					try {
+						let todoList = await AsyncStorage.getItem('todoList');
+						todoList = JSON.parse(todoList);
+						if (todoList && todoList.length) {
+							_this.setState({ todoList });
+						}
+						let type = await AsyncStorage.getItem('type');
+						if (type) {
+							_this.setType(type);
+						}
+					} catch (e) {
+						console.log('Error from AsyncStorage: ', e);
+					}
+				}
+				getData();
+			}
+		);
+		
 	}
 
 	render() {
 		const { inputValue, todoList, type } = this.state;
+
 		return (
 			<View style={styles.container}>
 				<ScrollView
@@ -79,14 +113,9 @@ class todoApp extends PureComponent {
 					/>
 					<SubmitButton
 						submitTodo={this.submitTodo.bind(this)}
-						disabled={!this.state.inputValue}
+						disabled={!inputValue}
 					/>
 				</ScrollView>
-				<TabBar
-					todoList={todoList}
-					setType={this.setType.bind(this)}
-					type={type}
-				/>
 			</View>
 		);
 	}

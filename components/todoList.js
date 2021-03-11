@@ -1,30 +1,40 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import { View } from 'react-native';
 import Todo from './todo';
-const TodoList = ({ todoList, deleteTodo, toggleComplete, type }) => {
-	const getVisibleTodoList = (list, type) => {
-		switch (type) {
-			case 'All':
-				return list;
-			case 'Complete':
-				return list.filter((t) => t.complete);
-			case 'Active':
-				return list.filter((t) => !t.complete);
+
+function getListByType(list = [], type = 'All') {
+	if (type === 'Active') {
+		return list.filter(r => !r.complete);
+	} else if (type === 'Complete') {
+		return list.filter(r => r.complete);
+	} else {
+		return list;
+	}
+}
+
+export default class TodoList extends PureComponent{	
+	render() {
+		const {
+			todoList,
+			deleteTodo,
+			toggleComplete,
+			type
+		} = this.props;
+	
+		let list = getListByType(todoList, type);
+		if (list && list.length) {
+			list = list.map((todo, i) => {
+				return (
+					<Todo
+						key={todo.todoIndex}
+						todo={todo}
+						deleteTodo={deleteTodo}
+						toggleComplete={toggleComplete}
+					/>
+				);
+			});
 		}
-	};
-	todoList = getVisibleTodoList(todoList, type);
-	todoList = todoList.map((todo, i) => {
-		return (
-			<Todo
-				key={todo.todoIndex}
-				todo={todo}
-				deleteTodo={deleteTodo}
-				toggleComplete={toggleComplete}
-			/>
-		);
-	});
 
-	return <View>{todoList}</View>;
-};
-
-export default TodoList;
+		return <View>{list}</View>;
+	}
+}
