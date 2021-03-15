@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
 		borderColor: 'rgba(0, 0, 0, 0.1)',
 		justifyContent: 'center',
 		alignItems: 'center',
+		borderRadius: 5,
 	},
 	submitText: {
 		color: '#666',

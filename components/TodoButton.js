@@ -15,7 +15,7 @@ const TodoButton = ({ onPress, complete, name }) => {
 					name === 'Delete' ? styles.deleteButton : null,
 				]}
 			>
-				{name}
+				
 			</Text>
 		</TouchableHighlight>
 	);
@@ -28,7 +28,9 @@ const styles = StyleSheet.create({
 		marginRight: 5,
 		borderWidth: 1,
 		borderColor: '#ededed',
-		borderRadius: 4,
+		borderRadius: 32,
+		width: 32,
+		height: 32,
 	},
 	text: {
 		color: '#666',

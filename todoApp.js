@@ -107,16 +107,18 @@ class todoApp extends PureComponent {
 						inputValue={inputValue}
 						inputChange={(text) => this.inputChange(text)}
 					/>
-					<TodoList
-						todoList={todoList}
-						deleteTodo={this.deleteTodo.bind(this)}
-						toggleComplete={this.toggleComplete.bind(this)}
-						type={type}
+					<View style={{marginTop: 15}}>
+						<TodoList
+							todoList={todoList}
+							deleteTodo={this.deleteTodo.bind(this)}
+							toggleComplete={this.toggleComplete.bind(this)}
+							type={type}
+						/>
+						<SubmitButton
+							submitTodo={this.submitTodo.bind(this)}
+							disabled={!inputValue}
 					/>
-					<SubmitButton
-						submitTodo={this.submitTodo.bind(this)}
-						disabled={!inputValue}
-					/>
+					</View>
 				</ScrollView>
 			</View>
 		);
