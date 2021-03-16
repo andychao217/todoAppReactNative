@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-community/async-storage';
 import todoApp from './todoApp';
 
@@ -23,18 +24,26 @@ const TabNavigator = createBottomTabNavigator(
                 });
                 getData();
             },
-            // tabBarIcon: ({ focused, color, size }) => {
-            //     // let iconName;
-            //     // if (route.name === 'Home') {
-            //     // iconName = focused
-            //     //     ? 'ios-information-circle'
-            //     //     : 'ios-information-circle-outline';
-            //     // } else if (route.name === 'Settings') {
-            //     // iconName = focused ? 'ios-list-box' : 'ios-list';
-            //     // }
-            //     // You can return any component that you like here!
-            //     return <Text>{todoListLength}</Text>;
-            // },
+            tabBarIcon: (props) =>
+            {
+                //console.log("props", props);
+                let iconName, focused = props.focused, routeName = navigation.state.routeName;
+                if (routeName === 'All') {
+                    iconName = 'dehaze';
+                } else if (routeName === 'Active') {
+                    iconName = 'check';
+                } else {
+                    iconName = 'circle';
+                }
+                // You can return any component that you like here!
+                return (
+                    <MaterialIcons
+                        name={iconName}
+                        size={26}
+                        color={focused ? 'tomato' : 'lightgray'}
+                    />
+                );
+            },
         }),
         tabBarOptions: {
             activeTintColor: 'tomato',
