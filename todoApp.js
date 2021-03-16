@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, Appearance } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Heading from './components/heading';
 import TextInput from './components/textInput';
@@ -63,7 +63,7 @@ class todoApp extends PureComponent {
 	}
 
 	async componentDidMount() {
-		const { navigation, screenProps } = this.props;
+		const { navigation } = this.props;
 		const _this = this;
 
 		async function getData(){
@@ -95,17 +95,24 @@ class todoApp extends PureComponent {
 
 	render() {
 		const { inputValue, todoList, type } = this.state;
-
+		const colorScheme = Appearance.getColorScheme();
 		return (
-			<View style={styles.container}>
+			<View
+				style={
+					colorScheme !== 'dark' ?
+						styles.container :
+						[styles.container, styles.darkBackground]
+				}
+			>
 				<ScrollView
 					keyboardShouldPersistTaps="always"
 					style={styles.content}
 				>
-					<Heading />
+					<Heading theme={colorScheme} />
 					<TextInput
 						inputValue={inputValue}
 						inputChange={(text) => this.inputChange(text)}
+						theme={colorScheme}
 					/>
 					<View style={{marginTop: 15}}>
 						<TodoList
@@ -113,11 +120,13 @@ class todoApp extends PureComponent {
 							deleteTodo={this.deleteTodo.bind(this)}
 							toggleComplete={this.toggleComplete.bind(this)}
 							type={type}
+							theme={colorScheme}
 						/>
 						<SubmitButton
 							submitTodo={this.submitTodo.bind(this)}
 							disabled={!inputValue}
-					/>
+							theme={colorScheme}
+						/>
 					</View>
 				</ScrollView>
 			</View>
@@ -129,6 +138,9 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#f5f5f5',
+	},
+	darkBackground: {
+		backgroundColor: 'rgb(37,33,32)',
 	},
 	content: {
 		flex: 1,

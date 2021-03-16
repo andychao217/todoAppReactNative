@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, TouchableHighlight } from 'react-native';
 
-const TodoButton = ({ onPress, complete, name }) => {
+const TodoButton = ({ onPress, complete, name, theme }) => {
 	return (
 		<TouchableHighlight
 			onPress={onPress}
@@ -15,7 +15,7 @@ const TodoButton = ({ onPress, complete, name }) => {
 					name === 'Delete' ? styles.deleteButton : null,
 				]}
 			>
-				
+				{name}
 			</Text>
 		</TouchableHighlight>
 	);
@@ -26,9 +26,7 @@ const styles = StyleSheet.create({
 		alignSelf: 'flex-end',
 		padding: 7,
 		marginRight: 5,
-		borderWidth: 1,
-		borderColor: '#ededed',
-		borderRadius: 32,
+		borderWidth: 0,
 		width: 32,
 		height: 32,
 	},

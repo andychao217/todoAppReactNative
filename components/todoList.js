@@ -18,9 +18,10 @@ export default class TodoList extends PureComponent{
 			todoList,
 			deleteTodo,
 			toggleComplete,
-			type
+			type,
+			theme,
 		} = this.props;
-	
+		
 		let list = getListByType(todoList, type);
 		if (list && list.length) {
 			list = list.map((todo, i) => {
@@ -30,6 +31,7 @@ export default class TodoList extends PureComponent{
 						todo={todo}
 						deleteTodo={deleteTodo}
 						toggleComplete={toggleComplete}
+						theme={theme}
 					/>
 				);
 			});

@@ -1,18 +1,23 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
 
-const SubmitButton = ({ submitTodo, disabled }) => {
+const SubmitButton = ({ submitTodo, disabled, theme }) => {
 	return (
 		<View style={styles.buttonContainer}>
 			<TouchableHighlight
 				onPress={submitTodo}
-				style={styles.button}
+				style={[
+					styles.button,
+					theme !== 'dark' ? null : styles.darkButtonBg
+				]}
 				underlayColor="#efefef"
 				disabled={disabled}
 			>
 				<Text
 					style={
-						disabled ? styles.submitTextDisabled : styles.submitText
+						theme !== 'dark' ?
+							(disabled ? styles.submitTextDisabled : styles.submitText) :
+							(disabled ? [styles.submitTextDisabled, styles.darkTextColorDisabled] : [styles.submitText, styles.darkTextColor])
 					}
 				>
 					Submit
@@ -40,13 +45,22 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderRadius: 5,
 	},
+	darkButtonBg: {
+		backgroundColor: 'rgb(25,25,25)',
+	},
 	submitText: {
 		color: '#666',
 		fontWeight: '600',
 	},
+	darkTextColor: {
+		color: 'whitesmoke',
+	},
 	submitTextDisabled: {
 		color: '#b1b1b1',
 		fontWeight: '600',
+	},
+	darkTextColorDisabled: {
+		color: '#666',
 	},
 });
 

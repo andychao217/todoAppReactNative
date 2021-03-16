@@ -1,15 +1,18 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 
-const Input = ({ inputValue, inputChange }) => {
+const Input = ({ inputValue, inputChange, theme }) => {
 	return (
 		<View style={styles.inputContainer}>
 			<TextInput
 				value={inputValue}
 				onChangeText={inputChange}
-				style={styles.input}
+				style={[
+					styles.input,
+					theme !== 'dark' ? null : styles.darkBgColor,
+				]}
 				placeholder="What needs to be done ?"
-				placeholderTextColor="#CACACA"
+				placeholderTextColor={theme !== 'dark' ? '#CACACA' : 'rgb(149,149,149)'}
 				selectionColor="orangered"
 			/>
 		</View>
@@ -35,6 +38,9 @@ const styles = StyleSheet.create({
 		paddingRight: 10,
 		borderRadius: 5,
 	},
+	darkBgColor: {
+		backgroundColor: 'rgb(47,54,61)',
+	}
 });
 
 export default Input;
