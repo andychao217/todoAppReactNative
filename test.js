@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
-import { Text } from 'react-native';
+import React, { PureComponent } from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-community/async-storage';
-import todoApp from './todoApp';
+import TodoApp from './todoApp';
+import Settings from './components/setting';
 
-let todoListLength = 0;
 const TabNavigator = createBottomTabNavigator(
     {
-        All: todoApp,
-        Active: todoApp,
-        Complete: todoApp
+        All: TodoApp,
+        Active: TodoApp,
+        Complete: TodoApp,
+        Setting: Settings,
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
@@ -22,7 +22,6 @@ const TabNavigator = createBottomTabNavigator(
                 navigation.navigate(navigation.state.routeName, {
                     routeName,
                 });
-                getData();
             },
             tabBarIcon: (props) =>
             {
@@ -32,8 +31,10 @@ const TabNavigator = createBottomTabNavigator(
                     iconName = 'dehaze';
                 } else if (routeName === 'Active') {
                     iconName = 'check';
-                } else {
+                } else if (routeName === 'Complete') {
                     iconName = 'circle';
+                } else {
+                    iconName = 'settings';
                 }
                 // You can return any component that you like here!
                 return (
@@ -53,27 +54,47 @@ const TabNavigator = createBottomTabNavigator(
 );
 
 const AppContainer = createAppContainer(TabNavigator);
-	
-async function getData(){
-    try {
-        let todoList = await AsyncStorage.getItem('todoList');
-        todoList = JSON.parse(todoList);
-        if (todoList && todoList.length) {
-            todoListLength = todoList.length;
-        }
-    } catch (e) {
-        console.log('Error from AsyncStorage: ', e);
-    }
-}
 
-export default () =>{
-    useEffect(() =>  {
-        getData();
-    }, []);
-    const theme = useColorScheme();
-    return (
-        <AppearanceProvider>
-            <AppContainer theme={theme} />
-        </AppearanceProvider>
-    );
+export default class App extends PureComponent {
+    state = {
+        colorScheme: 'dark',
+        todoListLength: 0,
+    };
+
+    async getData() {
+        const _this = this;
+        try {
+            let todoList = await AsyncStorage.getItem('todoList');
+            todoList = JSON.parse(todoList);
+            if (todoList && todoList.length) {
+                todoListLength = todoList.length;
+                _this.setState({
+                    todoListLength,
+                });
+            }
+            const colorScheme = await AsyncStorage.getItem('colorScheme');
+            if (colorScheme) {
+                _this.setState({
+                    colorScheme,
+                });
+            }
+        } catch (e) {
+            console.log('Error from AsyncStorage: ', e);
+        }
+    }
+
+    componentDidMount() {
+		this.getData();
+    }
+
+    render() {
+        return (
+            <AppearanceProvider>
+                <AppContainer
+                    theme={this.state.colorScheme}
+                    screenProps={{ getData: this.getData.bind(this) }}
+                />
+            </AppearanceProvider>
+        );
+    }
 }

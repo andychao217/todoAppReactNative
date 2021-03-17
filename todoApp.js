@@ -1,16 +1,17 @@
 import React, { PureComponent } from 'react';
-import { View, ScrollView, StyleSheet, Appearance } from 'react-native';
+import { View, ScrollView, StyleSheet, Appearance, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Heading from './components/heading';
 import TextInput from './components/textInput';
 import SubmitButton from './components/SubmitButton';
 import TodoList from './components/todoList';
 
-class todoApp extends PureComponent {
+class TodoApp extends PureComponent {
 	state = {
 		inputValue: '',
 		todoList: [],
 		type: 'All',
+		colorScheme: 'dark',
 	};
 
 	inputChange(value) {
@@ -62,48 +63,56 @@ class todoApp extends PureComponent {
 		this.forceUpdate();
 	}
 
-	async componentDidMount() {
+	async getData() {
+		const _this = this;
+		try {
+			let todoList = await AsyncStorage.getItem('todoList');
+			todoList = JSON.parse(todoList);
+			if (todoList && todoList.length) {
+				_this.setState({ todoList });
+			}
+			const type = await AsyncStorage.getItem('type');
+			if (type) {
+				_this.setType(type);
+			}
+			const colorScheme = await AsyncStorage.getItem('colorScheme');
+			if (colorScheme) {
+				_this.setState({
+					colorScheme,
+				});
+			}
+		} catch (e) {
+			console.log('Error from AsyncStorage: ', e);
+		}
+	}
+		
+	componentDidMount() {
 		const { navigation } = this.props;
 		const _this = this;
-
-		async function getData(){
-			try {
-				let todoList = await AsyncStorage.getItem('todoList');
-				todoList = JSON.parse(todoList);
-				if (todoList && todoList.length) {
-					_this.setState({ todoList });
-				}
-				let type = await AsyncStorage.getItem('type');
-				if (type) {
-					_this.setType(type);
-				}
-			} catch (e) {
-				console.log('Error from AsyncStorage: ', e);
-			}
-		}
-		
-		getData();
-		
+		_this.getData();
 		const didFocusSubscription = navigation.addListener(
 			'didFocus',
 			payload => {
-				getData();
+				_this.getData();
 			}
 		);
-		
 	}
 
 	render() {
-		const { inputValue, todoList, type } = this.state;
-		const colorScheme = Appearance.getColorScheme();
+		const { inputValue, todoList, type, colorScheme } = this.state;
+		// const colorScheme = Appearance.getColorScheme();
 		return (
 			<View
-				style={
-					colorScheme !== 'dark' ?
-						styles.container :
-						[styles.container, styles.darkBackground]
-				}
+				style={[
+                    styles.container,
+                    colorScheme !== 'dark' ? null : styles.darkBackground,
+                ]}
 			>
+				<StatusBar
+					barStyle={
+						colorScheme !== 'dark' ? 'dark-content' : 'light-content'
+					}
+				/>
 				<ScrollView
 					keyboardShouldPersistTaps="always"
 					style={styles.content}
@@ -148,4 +157,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default todoApp;
+export default TodoApp;

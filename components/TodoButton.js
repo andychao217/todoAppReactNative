@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet, TouchableHighlight } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const TodoButton = ({ onPress, complete, name, theme }) => {
 	return (
@@ -8,15 +9,16 @@ const TodoButton = ({ onPress, complete, name, theme }) => {
 			style={styles.button}
 			underlayColor="#efefef"
 		>
-			<Text
-				style={[
-					styles.text,
-					complete ? styles.complete : null,
-					name === 'Delete' ? styles.deleteButton : null,
-				]}
-			>
-				{name}
-			</Text>
+			<MaterialIcons
+				name={
+					name === 'Delete' ? 'delete-outline' : 'check'
+				}
+				size={18}
+				color={
+					name === 'Delete' ?
+						'red' : (complete ? 'green' : '#666')
+				}
+			/>
 		</TouchableHighlight>
 	);
 };
@@ -29,16 +31,6 @@ const styles = StyleSheet.create({
 		borderWidth: 0,
 		width: 32,
 		height: 32,
-	},
-	text: {
-		color: '#666',
-	},
-	complete: {
-		color: 'green',
-		fontWeight: 'bold',
-	},
-	deleteButton: {
-		color: 'rgba(175, 47, 47, 1)',
 	},
 });
 
