@@ -1,21 +1,48 @@
 import React, { PureComponent } from 'react';
-import { View, Text, ScrollView, StyleSheet, Appearance, Switch, StatusBar } from 'react-native';
+import {
+    View,
+    Text,
+    ScrollView,
+    StyleSheet,
+    Appearance,
+    Switch,
+    StatusBar,
+    TouchableHighlight,
+    TouchableOpacity,
+} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 class Settings extends PureComponent {
 	state = {
-		colorScheme: 'dark',
+        colorScheme: 'dark',
+        isAutoTheme: false,
 	};
 
     toggleSwitch(value) {
-        const colorScheme = value ? 'dark' : 'light';
-        console.log(value);
+        let colorScheme = this.state.colorScheme;
+        if (value) {
+            colorScheme = Appearance.getColorScheme();
+        }
 		this.setState({
-			colorScheme,
+            colorScheme,
+            isAutoTheme: value,
         });
         AsyncStorage.setItem('colorScheme', colorScheme);
         this.props.screenProps.getData();
         this.forceUpdate();
+    }
+
+    manualSelectTheme(theme)
+    {
+        console.log('theme', theme)
+        const colorScheme = theme;
+        this.setState({
+            colorScheme,
+        });
+        AsyncStorage.setItem('colorScheme', colorScheme);
+        this.props.screenProps.getData();
+        // this.forceUpdate();
     }
 
 	async componentDidMount() {
@@ -33,9 +60,7 @@ class Settings extends PureComponent {
     }
 
 	render() {
-		// const colorScheme = Appearance.getColorScheme();
-        const colorScheme = this.state.colorScheme;
-        const switchStatus = this.state.colorScheme === 'dark' ? true : false;
+        const { colorScheme, isAutoTheme } = this.state;
 		return (
 			<View
                 style={[
@@ -67,15 +92,75 @@ class Settings extends PureComponent {
                             styles.switchText,
                             colorScheme !== 'dark' ? null : styles.darkSwitchText,
                         ]}>
-                            Dark mode
+                            Automatic
                         </Text>
                         <Switch
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
                             thumbColor={colorScheme !== 'dark' ? "#fff" : 'gray'}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={this.toggleSwitch.bind(this)}
-                            value={switchStatus}
+                            value={isAutoTheme}
                         />
+                    </View>
+                    <View style={[
+                        styles.checkListContainer,
+                        isAutoTheme ? styles.hideCheckListContainer : null,
+                    ]}>
+                        <Text style={[
+                            styles.switchText,
+                            colorScheme !== 'dark' ? null : styles.darkSwitchText,
+                            {marginLeft: 10, marginBottom: 10}
+                        ]}>
+                            Select Manually
+                        </Text>
+                        <TouchableHighlight
+                            onPress={this.manualSelectTheme.bind(this, 'dark')}
+                            underlayColor="#efefef"
+                        >
+                             <View style={[
+                                styles.checkContainer,
+                                colorScheme !== 'dark' ? null : styles.darkCheckContainer,
+                            ]}>
+                                <Text style={[
+                                    styles.switchText,
+                                    colorScheme !== 'dark' ? null : styles.darkSwitchText,
+                                ]}>
+                                    Dark mode
+                                </Text>
+                                <MaterialIcons
+                                    name={'check'}
+                                    size={26}
+                                    color={'green'}
+                                    style={{
+                                        display: colorScheme !== 'dark' ? 'none' : 'flex',
+                                    }}
+                                />
+                            </View>               
+                        </TouchableHighlight>
+                       <TouchableHighlight
+                            onPress={this.manualSelectTheme.bind(this, 'light')}
+                            underlayColor="#efefef"
+                        >
+                            <View style={[
+                                styles.checkContainer,
+                                colorScheme !== 'dark' ? null : styles.darkCheckContainer,
+                            ]}>
+                                <Text style={[
+                                    styles.switchText,
+                                    colorScheme !== 'dark' ? null : styles.darkSwitchText,
+                                ]}>
+                                    Light mode
+                                </Text>
+                                <MaterialIcons
+                                    name={'check'}
+                                    size={26}
+                                    color={'green'}
+                                    style={{
+                                        display: colorScheme !== 'dark' ? 'flex' : 'none',
+                                    }}
+                                />
+                            </View>
+                        </TouchableHighlight>
                     </View>
 				</ScrollView>
 			</View>
@@ -109,7 +194,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 10,
-        backgroundColor: 'lightgray'
+        backgroundColor: 'lightgray',
+        marginBottom: 10,
     },
     darkSwitchContainer: {
         backgroundColor: 'rgb(37,37,37)',
@@ -120,7 +206,22 @@ const styles = StyleSheet.create({
     },
     darkSwitchText: {
         color: '#ededed',
-    }
+    },
+    hideCheckListContainer: {
+        display: 'none',
+    },
+    checkListContainer: {
+        flexDirection: 'column',
+    },
+    checkContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        backgroundColor: 'lightgray',
+    },
+    darkCheckContainer: {
+        backgroundColor: 'rgb(37,37,37)',
+    },
 });
 
 export default Settings;
