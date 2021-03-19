@@ -1,14 +1,16 @@
 import React from 'react';
-import { Text, StyleSheet, TouchableHighlight } from 'react-native';
+import { StyleSheet, TouchableHighlight } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const TodoButton = ({ onPress, complete, name, theme }) => {
+	// /todo项目控制按钮
 	return (
 		<TouchableHighlight
 			onPress={onPress}
 			style={styles.button}
 			underlayColor="#efefef"
 		>
+			{/* 按钮图标 */}
 			<MaterialIcons
 				name={
 					name === 'Delete' ? 'delete-outline' : 'check'

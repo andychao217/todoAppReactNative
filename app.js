@@ -4,9 +4,10 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-community/async-storage';
-import TodoApp from './todoApp';
-import Settings from './components/setting';
+import TodoApp from './components/todoApp';
+import Settings from './components/settings';
 
+//配置页面地步tab导航栏
 const TabNavigator = createBottomTabNavigator(
     {
         All: TodoApp,
@@ -16,13 +17,16 @@ const TabNavigator = createBottomTabNavigator(
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
-            tabBarOnPress: (scene) => {
+            //tab导航栏切换事件
+            tabBarOnPress: (scene) =>
+            {
                 const routeName = navigation.state.routeName;
                 AsyncStorage.setItem('type', routeName);
                 navigation.navigate(navigation.state.routeName, {
                     routeName,
                 });
             },
+            //tab导航栏图标
             tabBarIcon: (props) =>
             {
                 //console.log("props", props);
@@ -46,6 +50,7 @@ const TabNavigator = createBottomTabNavigator(
                 );
             },
         }),
+        //tab导航栏样式
         tabBarOptions: {
             activeTintColor: 'tomato',
             inactiveTintColor: 'lightgray',
@@ -61,6 +66,7 @@ export default class App extends PureComponent {
         todoListLength: 0,
     };
 
+    //获取todoList、colorScheme数据
     async getData() {
         const _this = this;
         try {

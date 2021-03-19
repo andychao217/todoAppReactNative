@@ -19,6 +19,7 @@ class Settings extends PureComponent {
         isAutoTheme: false,
 	};
 
+    //开启关闭自动选择手机系统主题色
     toggleSwitch(value) {
         let colorScheme = this.state.colorScheme;
         if (value) {
@@ -33,9 +34,9 @@ class Settings extends PureComponent {
         this.forceUpdate();
     }
 
-    manualSelectTheme(theme)
+    //手动选择主题
+    manualSelectTheme(theme) 
     {
-        console.log('theme', theme)
         const colorScheme = theme;
         this.setState({
             colorScheme,
@@ -61,6 +62,17 @@ class Settings extends PureComponent {
 
 	render() {
         const { colorScheme, isAutoTheme } = this.state;
+        const colorSchemeList = [
+            {
+                title: 'Dark mode',
+                name: 'dark',
+            },
+            {
+                title: 'Light mode',
+                name: 'light',
+            }
+        ];
+        const _this = this;
 		return (
 			<View
                 style={[
@@ -102,6 +114,7 @@ class Settings extends PureComponent {
                             value={isAutoTheme}
                         />
                     </View>
+                    {/* 手动选择主题 */}
                     <View style={[
                         styles.checkListContainer,
                         isAutoTheme ? styles.hideCheckListContainer : null,
@@ -113,54 +126,43 @@ class Settings extends PureComponent {
                         ]}>
                             Select Manually
                         </Text>
-                        <TouchableHighlight
-                            onPress={this.manualSelectTheme.bind(this, 'dark')}
-                            underlayColor="#efefef"
-                        >
-                             <View style={[
-                                styles.checkContainer,
-                                colorScheme !== 'dark' ? null : styles.darkCheckContainer,
-                            ]}>
-                                <Text style={[
-                                    styles.switchText,
-                                    colorScheme !== 'dark' ? null : styles.darkSwitchText,
-                                ]}>
-                                    Dark mode
-                                </Text>
-                                <MaterialIcons
-                                    name={'check'}
-                                    size={26}
-                                    color={'green'}
-                                    style={{
-                                        display: colorScheme !== 'dark' ? 'none' : 'flex',
-                                    }}
-                                />
-                            </View>               
-                        </TouchableHighlight>
-                       <TouchableHighlight
-                            onPress={this.manualSelectTheme.bind(this, 'light')}
-                            underlayColor="#efefef"
-                        >
-                            <View style={[
-                                styles.checkContainer,
-                                colorScheme !== 'dark' ? null : styles.darkCheckContainer,
-                            ]}>
-                                <Text style={[
-                                    styles.switchText,
-                                    colorScheme !== 'dark' ? null : styles.darkSwitchText,
-                                ]}>
-                                    Light mode
-                                </Text>
-                                <MaterialIcons
-                                    name={'check'}
-                                    size={26}
-                                    color={'green'}
-                                    style={{
-                                        display: colorScheme !== 'dark' ? 'flex' : 'none',
-                                    }}
-                                />
-                            </View>
-                        </TouchableHighlight>
+                        {
+                            //遍历生成主题列表
+                            colorSchemeList.map((theme) => {
+                                const { name, title } = theme;
+                                return (
+                                   <TouchableOpacity
+                                        onPress={_this.manualSelectTheme.bind(_this, name)}
+                                        underlayColor="#efefef"
+                                        key={name}
+                                    >
+                                        <View style={[
+                                            styles.checkContainer,
+                                            colorScheme !== 'dark' ? null : styles.darkCheckContainer,
+                                        ]}>
+                                            <Text style={[
+                                                styles.switchText,
+                                                colorScheme !== 'dark' ? null : styles.darkSwitchText,
+                                            ]}>
+                                                {title}
+                                            </Text>
+                                            <MaterialIcons
+                                                name={'check'}
+                                                size={26}
+                                                color={'green'}
+                                                style={{
+                                                    display: name === 'dark' ? (
+                                                        colorScheme !== 'dark' ? 'none' : 'flex'
+                                                    ): (
+                                                        colorScheme !== 'dark' ? 'flex' : 'none'    
+                                                    ),
+                                                }}
+                                            />
+                                        </View>            
+                                    </TouchableOpacity>
+                               );
+                            })
+                        }
                     </View>
 				</ScrollView>
 			</View>
@@ -169,10 +171,12 @@ class Settings extends PureComponent {
 }
 
 const styles = StyleSheet.create({
-	container: {
+	//整体布局
+    container: {
 		flex: 1,
 		backgroundColor: '#f5f5f5',
-	},
+    },
+    //暗色主题背景色
 	darkBackground: {
 		backgroundColor: 'rgb(37,33,32)',
 	},
@@ -180,11 +184,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingTop: 0,
     },
+    //顶部页面标题布局
     headerContainer: {
         padding: 10,
         height: 50,
         marginTop: 30,
     },
+    //顶部页面标题文字
     headerTitleText: {
         fontSize: 24,
         textAlign: 'center',
@@ -198,20 +204,21 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     darkSwitchContainer: {
-        backgroundColor: 'rgb(37,37,37)',
+        backgroundColor: 'rgb(37,37,37)', //暗色主题Switch背景色
     },
     switchText: {
         flex: 1,
         color: '#252525',
     },
     darkSwitchText: {
-        color: '#ededed',
+        color: '#ededed', //暗色主题Switch开关标题文字颜色
     },
     hideCheckListContainer: {
-        display: 'none',
+        display: 'none', //隐藏手动选择主题列表
     },
+    //手动选择主题列表
     checkListContainer: {
-        flexDirection: 'column',
+        flexDirection: 'column', 
     },
     checkContainer: {
         flexDirection: 'row',
@@ -220,7 +227,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'lightgray',
     },
     darkCheckContainer: {
-        backgroundColor: 'rgb(37,37,37)',
+        backgroundColor: 'rgb(37,37,37)', //暗色主题手动选择主题列表背景色
     },
 });
 

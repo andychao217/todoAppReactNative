@@ -1,6 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
+import {
+	View,
+	Text,
+	StyleSheet,
+	TouchableHighlight
+} from 'react-native';
 
+//提交todo按钮
 const SubmitButton = ({ submitTodo, disabled, theme }) => {
 	return (
 		<View style={styles.buttonContainer}>
@@ -45,6 +51,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderRadius: 5,
 	},
+	//暗色主题按钮背景色
 	darkButtonBg: {
 		backgroundColor: 'rgb(25,25,25)',
 	},
@@ -52,6 +59,7 @@ const styles = StyleSheet.create({
 		color: '#666',
 		fontWeight: '600',
 	},
+	//暗色主题按钮文字颜色
 	darkTextColor: {
 		color: 'whitesmoke',
 	},
@@ -59,6 +67,7 @@ const styles = StyleSheet.create({
 		color: '#b1b1b1',
 		fontWeight: '600',
 	},
+	//暗色主题按钮disable状态文字颜色
 	darkTextColorDisabled: {
 		color: '#666',
 	},

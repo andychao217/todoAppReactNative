@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 
+// /todo项目文字输入框
 const Input = ({ inputValue, inputChange, theme }) => {
 	return (
 		<View style={styles.inputContainer}>
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
 		paddingRight: 10,
 		borderRadius: 5,
 	},
+	//暗色主题输入框背景色
 	darkBgColor: {
 		backgroundColor: 'rgb(47,54,61)',
 	}

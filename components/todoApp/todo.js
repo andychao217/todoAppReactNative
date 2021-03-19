@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import TodoButton from './TodoButton';
 
+// /todo项目
 const Todo = ({ todo, deleteTodo, toggleComplete, theme }) => {
 	return (
 		<View
@@ -15,18 +16,21 @@ const Todo = ({ todo, deleteTodo, toggleComplete, theme }) => {
 					styles.todoText,
 					theme !== 'dark' ? null : styles.darkTodoTextColor,
 				]}
-				numberOfLines={1}
-				ellipsizeMode="tail"
+				numberOfLines={1} //文字显示行数
+				ellipsizeMode="tail" //文字超长时显示类型...
 			>
+				{/* todo项目文字内容 */}
 				{todo.title}
 			</Text>
 			<View style={styles.buttons}>
+				{/* todo项目完成控制按钮 */}
 				<TodoButton
 					name="Done"
 					complete={todo.complete}
 					onPress={() => toggleComplete(todo.todoIndex)}
 					theme={theme}
 				/>
+				{/* todo项目删除控制按钮 */}
 				<TodoButton
 					name="Delete"
 					onPress={() => deleteTodo(todo.todoIndex)}
@@ -38,6 +42,7 @@ const Todo = ({ todo, deleteTodo, toggleComplete, theme }) => {
 };
 
 const styles = StyleSheet.create({
+	// /todo项目布局
 	todoContainer: {
 		marginRight: 20,
 		marginLeft: 20,
@@ -58,6 +63,7 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		marginTop: 3,
 	},
+	//暗色主题todo项目背景、边框颜色
 	todoDarkColor: {
 		backgroundColor: 'rgb(53,56,59)',
 		borderColor: 'rgb(25,25,25)',
@@ -67,6 +73,7 @@ const styles = StyleSheet.create({
 		width: 280,
 		color: 'rgb(0,0,0)',
 	},
+	//暗色主题todo项目文字颜色
 	darkTodoTextColor: {
 		color: 'rgb(149,149,149)',
 	},

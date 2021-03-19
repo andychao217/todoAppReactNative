@@ -22,6 +22,7 @@ export default class TodoList extends PureComponent{
 			theme,
 		} = this.props;
 		
+		//根据页面类型，遍历生成todo项目列表
 		let list = getListByType(todoList, type);
 		if (list && list.length) {
 			list = list.map((todo, i) => {
