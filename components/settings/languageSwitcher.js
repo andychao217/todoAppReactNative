@@ -14,7 +14,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 class LanguageSwitcher extends PureComponent {
 	state = {
-        langScheme: 'cn',
+        langScheme: 'zh',
         isAutoLang: false,
 	};
 
@@ -65,7 +65,7 @@ class LanguageSwitcher extends PureComponent {
         const langSchemeList = [
             {
                 title: '中文',
-                name: 'cn',
+                name: 'zh',
             },
             {
                 title: 'English',
@@ -144,16 +144,16 @@ class LanguageSwitcher extends PureComponent {
                                                 size={26}
                                                 color={'green'}
                                                 style={{
-                                                    display: name === 'cn' ? (
-                                                        langScheme !== 'cn' ? 'none' : 'flex'
+                                                    display: name === 'zh' ? (
+                                                        langScheme !== 'zh' ? 'none' : 'flex'
                                                     ): (
-                                                        langScheme !== 'cn' ? 'flex' : 'none'    
+                                                        langScheme !== 'zh' ? 'flex' : 'none'    
                                                     ),
                                                 }}
                                             />
                                         </View>            
                                     </TouchableOpacity>
-                               );
+                                );
                             })
                         }
                     </View>
