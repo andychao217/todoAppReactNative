@@ -9,12 +9,14 @@ import TodoApp from './components/todoApp';
 
 import ThemeSwitcher from './components/settings/themeSwitcher';
 import SettingHome from './components/settings/settingHome';
+import LanguageSwitcher from './components/settings/languageSwitcher';
 
 //设置页面导航
 const SettingNavigator = createStackNavigator(
 	{
 		Setting: SettingHome,
-		Theme: ThemeSwitcher,
+        Theme: ThemeSwitcher,
+        Language: LanguageSwitcher,
 	},
 	{
 		initialRouteName: 'Setting',

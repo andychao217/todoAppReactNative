@@ -12,23 +12,23 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-class ThemeSwitcher extends PureComponent {
+class LanguageSwitcher extends PureComponent {
 	state = {
-        colorScheme: 'dark',
-        isAutoTheme: false,
+        langScheme: 'cn',
+        isAutoLang: false,
 	};
 
     //开启关闭自动选择手机系统主题色
     toggleSwitch(value) {
-        let colorScheme = this.state.colorScheme;
+        let langScheme = this.state.langScheme;
         if (value) {
-            colorScheme = Appearance.getColorScheme();
+         //   langScheme = Appearance.getlangScheme();
         }
 		this.setState({
-            colorScheme,
-            isAutoTheme: value,
+            langScheme,
+            isAutoLang: value,
         });
-        AsyncStorage.setItem('colorScheme', colorScheme);
+        AsyncStorage.setItem('langScheme', langScheme);
         this.props.screenProps.getData();
         this.forceUpdate();
     }
@@ -36,39 +36,40 @@ class ThemeSwitcher extends PureComponent {
     //手动选择主题
     manualSelectTheme(theme) 
     {
-        const colorScheme = theme;
+        const langScheme = theme;
         this.setState({
-            colorScheme,
+            langScheme,
         });
-        AsyncStorage.setItem('colorScheme', colorScheme);
+        AsyncStorage.setItem('langScheme', langScheme);
         this.props.screenProps.getData();
         // this.forceUpdate();
     }
 
 	async componentDidMount() {
-        const colorScheme = await AsyncStorage.getItem('colorScheme');
+        const langScheme = await AsyncStorage.getItem('langScheme');
         this.setState({
-            colorScheme,
+            langScheme,
         });
 	}
 
     async componentDidUpdate() {
-        const colorScheme = await AsyncStorage.getItem('colorScheme');
+        const langScheme = await AsyncStorage.getItem('langScheme');
         this.setState({
-            colorScheme,
+            langScheme,
         });
     }
 
 	render() {
-        const { colorScheme, isAutoTheme } = this.state;
-        const colorSchemeList = [
+        const { langScheme, isAutoLang } = this.state;
+        const { colorScheme } = this.props;
+        const langSchemeList = [
             {
-                title: 'Dark mode',
-                name: 'dark',
+                title: '中文',
+                name: 'cn',
             },
             {
-                title: 'Light mode',
-                name: 'light',
+                title: 'English',
+                name: 'en',
             }
         ];
         const _this = this;
@@ -103,13 +104,13 @@ class ThemeSwitcher extends PureComponent {
                             thumbColor={colorScheme !== 'dark' ? "#fff" : 'gray'}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={this.toggleSwitch.bind(this)}
-                            value={isAutoTheme}
+                            value={isAutoLang}
                         />
                     </View>
                     {/* 手动选择主题 */}
                     <View style={[
                         styles.checkListContainer,
-                        isAutoTheme ? styles.hideCheckListContainer : null,
+                        isAutoLang ? styles.hideCheckListContainer : null,
                     ]}>
                         <Text style={[
                             styles.switchText,
@@ -120,7 +121,7 @@ class ThemeSwitcher extends PureComponent {
                         </Text>
                         {
                             //遍历生成主题列表
-                            colorSchemeList.map((theme) => {
+                            langSchemeList.map((theme) => {
                                 const { name, title } = theme;
                                 return (
                                     <TouchableOpacity
@@ -143,10 +144,10 @@ class ThemeSwitcher extends PureComponent {
                                                 size={26}
                                                 color={'green'}
                                                 style={{
-                                                    display: name === 'dark' ? (
-                                                        colorScheme !== 'dark' ? 'none' : 'flex'
+                                                    display: name === 'cn' ? (
+                                                        langScheme !== 'cn' ? 'none' : 'flex'
                                                     ): (
-                                                        colorScheme !== 'dark' ? 'flex' : 'none'    
+                                                        langScheme !== 'cn' ? 'flex' : 'none'    
                                                     ),
                                                 }}
                                             />
@@ -211,4 +212,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ThemeSwitcher;
+export default LanguageSwitcher;
