@@ -1,11 +1,25 @@
 import React, { PureComponent } from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
+import { createStackNavigator } from 'react-navigation-stack';
+import { AppearanceProvider } from 'react-native-appearance';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-community/async-storage';
 import TodoApp from './components/todoApp';
-import Settings from './components/settings';
+
+import ThemeSwitcher from './components/settings/themeSwitcher';
+import SettingHome from './components/settings/settingHome';
+
+//设置页面导航
+const SettingNavigator = createStackNavigator(
+	{
+		Setting: SettingHome,
+		Theme: ThemeSwitcher,
+	},
+	{
+		initialRouteName: 'Setting',
+	}
+);
 
 //配置页面地步tab导航栏
 const TabNavigator = createBottomTabNavigator(
@@ -13,7 +27,7 @@ const TabNavigator = createBottomTabNavigator(
         All: TodoApp,
         Active: TodoApp,
         Complete: TodoApp,
-        Setting: Settings,
+        Setting: SettingNavigator,
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
@@ -63,21 +77,12 @@ const AppContainer = createAppContainer(TabNavigator);
 export default class App extends PureComponent {
     state = {
         colorScheme: 'dark',
-        todoListLength: 0,
     };
 
     //获取todoList、colorScheme数据
     async getData() {
         const _this = this;
         try {
-            let todoList = await AsyncStorage.getItem('todoList');
-            todoList = JSON.parse(todoList);
-            if (todoList && todoList.length) {
-                todoListLength = todoList.length;
-                _this.setState({
-                    todoListLength,
-                });
-            }
             const colorScheme = await AsyncStorage.getItem('colorScheme');
             if (colorScheme) {
                 _this.setState({

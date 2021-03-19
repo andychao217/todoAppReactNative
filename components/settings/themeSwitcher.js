@@ -7,13 +7,12 @@ import {
     Appearance,
     Switch,
     StatusBar,
-    TouchableHighlight,
     TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-class Settings extends PureComponent {
+class ThemeSwitcher extends PureComponent {
 	state = {
         colorScheme: 'dark',
         isAutoTheme: false,
@@ -85,13 +84,6 @@ class Settings extends PureComponent {
 						colorScheme !== 'dark' ? 'dark-content' : 'light-content'
 					}
 				/>
-                <View
-                    style={styles.headerContainer}
-                >
-                    <Text style={styles.headerTitleText}>
-                        Setting
-                    </Text>
-                </View>
 				<ScrollView
 					keyboardShouldPersistTaps="always"
 					style={styles.content}
@@ -184,18 +176,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingTop: 0,
     },
-    //顶部页面标题布局
-    headerContainer: {
-        padding: 10,
-        height: 50,
-        marginTop: 30,
-    },
-    //顶部页面标题文字
-    headerTitleText: {
-        fontSize: 24,
-        textAlign: 'center',
-        color: 'dimgray',
-    },
     switchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -231,4 +211,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Settings;
+export default ThemeSwitcher;

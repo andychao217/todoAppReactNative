@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, ScrollView, StyleSheet, Appearance, StatusBar } from 'react-native';
+import { View, ScrollView, StyleSheet, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Heading from './heading';
 import TextInput from './textInput';
