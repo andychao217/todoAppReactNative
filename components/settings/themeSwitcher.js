@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import I18n from '../languages';
 
 class ThemeSwitcher extends PureComponent {
 	state = {
@@ -29,13 +30,13 @@ class ThemeSwitcher extends PureComponent {
             isAutoTheme: value,
         });
         AsyncStorage.setItem('colorScheme', colorScheme);
+        AsyncStorage.setItem('isAutoTheme', JSON.stringify(value));
         this.props.screenProps.getData();
         this.forceUpdate();
     }
 
     //手动选择主题
-    manualSelectTheme(theme) 
-    {
+    manualSelectTheme(theme) {
         const colorScheme = theme;
         this.setState({
             colorScheme,
@@ -45,29 +46,34 @@ class ThemeSwitcher extends PureComponent {
         // this.forceUpdate();
     }
 
-	async componentDidMount() {
+    async getData() {
         const colorScheme = await AsyncStorage.getItem('colorScheme');
+        const isAutoTheme = JSON.parse(await AsyncStorage.getItem('isAutoTheme'));
         this.setState({
             colorScheme,
-        });
-	}
-
-    async componentDidUpdate() {
-        const colorScheme = await AsyncStorage.getItem('colorScheme');
-        this.setState({
-            colorScheme,
+            isAutoTheme,
         });
     }
 
+	componentDidMount() {
+        this.getData();
+	}
+
+    componentDidUpdate() {
+        this.getData();
+	}
+
 	render() {
         const { colorScheme, isAutoTheme } = this.state;
+        const { langScheme } = this.props.screenProps;
+        I18n.locale = langScheme;
         const colorSchemeList = [
             {
-                title: 'Dark mode',
+                title: I18n.t('darkMode'),
                 name: 'dark',
             },
             {
-                title: 'Light mode',
+                title: I18n.t('lightMode'),
                 name: 'light',
             }
         ];
@@ -96,7 +102,7 @@ class ThemeSwitcher extends PureComponent {
                             styles.switchText,
                             colorScheme !== 'dark' ? null : styles.darkSwitchText,
                         ]}>
-                            Automatic
+                            {I18n.t('automatic')}
                         </Text>
                         <Switch
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -116,7 +122,7 @@ class ThemeSwitcher extends PureComponent {
                             colorScheme !== 'dark' ? null : styles.darkSwitchText,
                             {marginLeft: 10, marginBottom: 10}
                         ]}>
-                            Select Manually
+                            {I18n.t('manually')}
                         </Text>
                         {
                             //遍历生成主题列表

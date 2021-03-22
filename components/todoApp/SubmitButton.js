@@ -5,9 +5,12 @@ import {
 	StyleSheet,
 	TouchableHighlight
 } from 'react-native';
+import I18n from '../languages';
 
 //提交todo按钮
-const SubmitButton = ({ submitTodo, disabled, theme }) => {
+const SubmitButton = ({ submitTodo, disabled, theme, langScheme }) =>
+{
+	I18n.locale = langScheme;
 	return (
 		<View style={styles.buttonContainer}>
 			<TouchableHighlight
@@ -26,7 +29,7 @@ const SubmitButton = ({ submitTodo, disabled, theme }) => {
 							(disabled ? [styles.submitTextDisabled, styles.darkTextColorDisabled] : [styles.submitText, styles.darkTextColor])
 					}
 				>
-					Submit
+					{I18n.t('submit')}
 				</Text>
 			</TouchableHighlight>
 		</View>

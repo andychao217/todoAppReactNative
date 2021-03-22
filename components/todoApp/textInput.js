@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
+import I18n from '../languages';
 
 // /todo项目文字输入框
-const Input = ({ inputValue, inputChange, theme }) => {
+const Input = ({ inputValue, inputChange, theme, langScheme }) => {
+	I18n.locale = langScheme;
 	return (
 		<View style={styles.inputContainer}>
 			<TextInput
@@ -12,7 +14,7 @@ const Input = ({ inputValue, inputChange, theme }) => {
 					styles.input,
 					theme !== 'dark' ? null : styles.darkBgColor,
 				]}
-				placeholder="What needs to be done ?"
+				placeholder={I18n.t('todoPlaceholder')}
 				placeholderTextColor={theme !== 'dark' ? '#CACACA' : 'rgb(149,149,149)'}
 				selectionColor="orangered"
 			/>

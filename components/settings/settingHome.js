@@ -1,34 +1,25 @@
 import React, { PureComponent } from 'react';
-import { View, TouchableHighlight, ScrollView, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import {
+	View,
+	Appearance,
+	ScrollView,
+	StyleSheet,
+	TouchableOpacity,
+	Text
+} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import I18n from '../languages';
 
 export default class SettingHome extends PureComponent{
-	state = {
-        colorScheme: 'dark',
-	};
-
-	async getData() {
-		const colorScheme = await AsyncStorage.getItem('colorScheme');
-        this.setState({
-            colorScheme,
-        });
-	}
-
-	async componentDidMount() {
-		this.getData();
-	}
-
-	async componentDidUpdate() {
-		this.getData();
-	}
-
 	render() {
 		const { navigation } = this.props;
-		const { colorScheme } = this.state;
+		const { colorScheme, langScheme } = this.props.screenProps;
+		console.log('locale', langScheme);
+		I18n.locale = langScheme;
 		const settingList = [
-			{ name: 'Theme', title: 'Theme' },
-			{ name: 'Language', title: 'Language' },
+			{ name: 'Theme', title: I18n.t('theme') },
+			{ name: 'Language', title: I18n.t('language') },
 		];
 		return (
 			<ScrollView

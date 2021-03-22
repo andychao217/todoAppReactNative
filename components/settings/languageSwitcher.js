@@ -4,13 +4,14 @@ import {
     Text,
     ScrollView,
     StyleSheet,
-    Appearance,
     Switch,
     StatusBar,
     TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import I18n from '../languages';
+import * as RNLocalize from "react-native-localize";
 
 class LanguageSwitcher extends PureComponent {
 	state = {
@@ -20,17 +21,21 @@ class LanguageSwitcher extends PureComponent {
 
     //开启关闭自动选择手机系统主题色
     toggleSwitch(value) {
-        let langScheme = this.state.langScheme;
-        if (value) {
-         //   langScheme = Appearance.getlangScheme();
-        }
 		this.setState({
-            langScheme,
             isAutoLang: value,
         });
-        AsyncStorage.setItem('langScheme', langScheme);
+        if (value){
+            const locales = RNLocalize.getLocales();
+            const langScheme = locales[0]?.languageCode;
+            I18n.locale = langScheme;
+            this.setState({
+                langScheme,
+            });
+            AsyncStorage.setItem('langScheme', langScheme);
+        }
+        AsyncStorage.setItem('isAutoLang', JSON.stringify(value));
         this.props.screenProps.getData();
-        this.forceUpdate();
+        // this.forceUpdate();
     }
 
     //手动选择主题
@@ -40,28 +45,32 @@ class LanguageSwitcher extends PureComponent {
         this.setState({
             langScheme,
         });
+        I18n.locale = langScheme;
         AsyncStorage.setItem('langScheme', langScheme);
         this.props.screenProps.getData();
         // this.forceUpdate();
     }
 
-	async componentDidMount() {
+	async getData() {
         const langScheme = await AsyncStorage.getItem('langScheme');
+        const isAutoLang = JSON.parse(await AsyncStorage.getItem('isAutoLang'));
         this.setState({
             langScheme,
-        });
-	}
-
-    async componentDidUpdate() {
-        const langScheme = await AsyncStorage.getItem('langScheme');
-        this.setState({
-            langScheme,
+            isAutoLang,
         });
     }
 
+	componentDidMount() {
+        this.getData();
+	}
+
+    componentDidUpdate() {
+        this.getData();
+	}
+
 	render() {
         const { langScheme, isAutoLang } = this.state;
-        const { colorScheme } = this.props;
+        const { colorScheme } = this.props.screenProps;
         const langSchemeList = [
             {
                 title: '中文',
@@ -97,7 +106,7 @@ class LanguageSwitcher extends PureComponent {
                             styles.switchText,
                             colorScheme !== 'dark' ? null : styles.darkSwitchText,
                         ]}>
-                            Automatic
+                            {I18n.t('automatic')}
                         </Text>
                         <Switch
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -117,7 +126,7 @@ class LanguageSwitcher extends PureComponent {
                             colorScheme !== 'dark' ? null : styles.darkSwitchText,
                             {marginLeft: 10, marginBottom: 10}
                         ]}>
-                            Select Manually
+                            {I18n.t('manually')}
                         </Text>
                         {
                             //遍历生成主题列表

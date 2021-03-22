@@ -14,9 +14,9 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7A020DAB6F3F0BA0A6D9946E84B38B7F"
-               BuildableName = "React-Core-AccessibilityResources.bundle"
-               BlueprintName = "React-Core-AccessibilityResources"
+               BlueprintIdentifier = "B51433D546A38C51AA781F192E8836F8"
+               BuildableName = "libRNLocalize.a"
+               BlueprintName = "RNLocalize"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

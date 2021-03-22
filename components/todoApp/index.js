@@ -11,7 +11,6 @@ class TodoApp extends PureComponent {
 		inputValue: '',
 		todoList: [],
 		type: 'All',
-		colorScheme: 'dark',
 	};
 
 	//监听input框输入事件
@@ -84,12 +83,6 @@ class TodoApp extends PureComponent {
 			} else {
 				_this.setType('All');
 			}
-			const colorScheme = await AsyncStorage.getItem('colorScheme');
-			if (colorScheme) {
-				_this.setState({
-					colorScheme,
-				});
-			}
 		} catch (e) {
 			console.log('Error from AsyncStorage: ', e);
 		}
@@ -113,8 +106,8 @@ class TodoApp extends PureComponent {
 			inputValue,
 			todoList,
 			type,
-			colorScheme
 		} = this.state;
+		const { colorScheme, langScheme } = this.props.screenProps;
 		return (
 			<View
 				style={[
@@ -136,6 +129,7 @@ class TodoApp extends PureComponent {
 						inputValue={inputValue}
 						inputChange={(text) => this.inputChange(text)}
 						theme={colorScheme}
+						langScheme={langScheme}
 					/>
 					<View style={{marginTop: 15}}>
 						<TodoList
@@ -149,6 +143,7 @@ class TodoApp extends PureComponent {
 							submitTodo={this.submitTodo.bind(this)}
 							disabled={!inputValue}
 							theme={colorScheme}
+							langScheme={langScheme}
 						/>
 					</View>
 				</ScrollView>
