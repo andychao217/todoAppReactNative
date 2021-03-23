@@ -46,7 +46,7 @@ class LanguageSwitcher extends PureComponent
         // this.forceUpdate();
     }
 
-    //手动选择主题
+    //手动选择语言
     manualSelectLanguage(theme) 
     {
         const langScheme = theme;
@@ -138,7 +138,7 @@ class LanguageSwitcher extends PureComponent
                             {I18n.t('manually')}
                         </Text>
                         {
-                            //遍历生成主题列表
+                            //遍历生成语言列表
                             langSchemeList.map((theme) => {
                                 const { name, title } = theme;
                                 return (

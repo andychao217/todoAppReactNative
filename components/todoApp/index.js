@@ -42,6 +42,7 @@ class TodoApp extends PureComponent{
 			inputValue: '',
 		});
 		AsyncStorage.setItem('todoList', JSON.stringify(todoList));
+		this.context.getData();
 	}
 
 	//删除todo项目
@@ -50,6 +51,7 @@ class TodoApp extends PureComponent{
 		todoList = todoList.filter((todo) => todo.todoIndex !== index);
 		this.setState({ todoList });
 		AsyncStorage.setItem('todoList', JSON.stringify(todoList));
+		this.context.getData();
 		this.forceUpdate();
 	}
 
@@ -63,6 +65,7 @@ class TodoApp extends PureComponent{
 		});
 		this.setState({ todoList });
 		AsyncStorage.setItem('todoList', JSON.stringify(todoList));
+		this.context.getData();
 		this.forceUpdate();
 	}
 

@@ -42,25 +42,21 @@ function SettingsStackScreen() {
     );
 }
 
-// 配置页面地步tab导航栏
-function BottomTabScreen() {
+// 配置页面tab导航栏
+function BottomTabScreen({ activeItemNumber }) {
     const Tab = createBottomTabNavigator();
     return (
         <Tab.Navigator
             initialRouteName="All"
             tabBarOptions={{
+                //tabBar文字颜色
                 activeTintColor: 'tomato',
                 inactiveTintColor: 'lightgray',
             }}
             screenOptions={({ navigation, route }) => ({
-                tabPress: (scene) =>
+                tabBarIcon: ({ focused, color, size }) =>
                 {
-                    console.log('tabPress');
-                    const routeName = route.name;
-                    AsyncStorage.setItem('type', routeName);
-                    navigation.navigate(route.name);
-                },
-                tabBarIcon: ({ focused, color, size }) => {
+                    //tabBar 图标
                     let iconName, routeName = route.name;
                     if (routeName === 'All') {
                         iconName = 'dehaze';
@@ -71,11 +67,10 @@ function BottomTabScreen() {
                     } else {
                         iconName = 'settings';
                     }
-                    // You can return any component that you like here!
                     return (
                         <MaterialIcons
                             name={iconName}
-                            size={26}
+                            size={24}
                             color={focused ? 'tomato' : 'lightgray'}
                         />
                     );
@@ -86,14 +81,15 @@ function BottomTabScreen() {
                 name="All"
                 component={TodoApp}
                 options={{
-                    tabBarLabel: I18n.t('all')
+                    tabBarLabel: I18n.t('all'),
                 }}
             />
             <Tab.Screen
                 name="Active"
                 component={TodoApp}
                 options={{
-                    tabBarLabel: I18n.t('active')
+                    tabBarLabel: I18n.t('active'),
+                    tabBarBadge: activeItemNumber
                 }}
             />
             <Tab.Screen
@@ -116,8 +112,9 @@ function BottomTabScreen() {
 
 export default class App extends PureComponent {
     state = {
-        colorScheme: 'dark',
-        langScheme: 'en',
+        colorScheme: 'dark', //主题配置
+        langScheme: 'en', //语言配置
+        activeItemNumber: 0, //进行中项目数量
     };
 
     //获取todoList、colorScheme数据
@@ -137,12 +134,24 @@ export default class App extends PureComponent {
                     langScheme,
                 });
             }
+            let todoList = JSON.parse(await AsyncStorage.getItem('todoList'));
+            if (todoList && todoList.length) {
+                todoList = todoList.filter(r => !r.complete);
+            }
+            let activeItemNumber = todoList.length || undefined;
+            _this.setState({
+                activeItemNumber
+            });
         } catch (e) {
             console.log('Error from AsyncStorage: ', e);
         }
     }
 
     componentDidMount() {
+		this.getData();
+    }
+
+    componentDidUpdate() {
 		this.getData();
     }
 
@@ -159,7 +168,7 @@ export default class App extends PureComponent {
                         this.state.colorScheme === 'dark' ? DarkTheme : DefaultTheme
                     }
                 >
-                    <BottomTabScreen />
+                    <BottomTabScreen activeItemNumber={this.state.activeItemNumber} />
                 </NavigationContainer>
             </Provider>
         );
