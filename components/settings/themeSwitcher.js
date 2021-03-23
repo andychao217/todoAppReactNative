@@ -13,7 +13,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import I18n from '../languages';
 
-class ThemeSwitcher extends PureComponent {
+import { AppContext } from '../../AppContext';
+class ThemeSwitcher extends PureComponent
+{
+    static contextType = AppContext;
+
 	state = {
         colorScheme: 'dark',
         isAutoTheme: false,
@@ -31,7 +35,7 @@ class ThemeSwitcher extends PureComponent {
         });
         AsyncStorage.setItem('colorScheme', colorScheme);
         AsyncStorage.setItem('isAutoTheme', JSON.stringify(value));
-        this.props.screenProps.getData();
+        this.context.getData();
         this.forceUpdate();
     }
 
@@ -42,7 +46,7 @@ class ThemeSwitcher extends PureComponent {
             colorScheme,
         });
         AsyncStorage.setItem('colorScheme', colorScheme);
-        this.props.screenProps.getData();
+        this.context.getData();
         // this.forceUpdate();
     }
 
@@ -65,7 +69,7 @@ class ThemeSwitcher extends PureComponent {
 
 	render() {
         const { colorScheme, isAutoTheme } = this.state;
-        const { langScheme } = this.props.screenProps;
+        const { langScheme } = this.context;
         I18n.locale = langScheme;
         const colorSchemeList = [
             {

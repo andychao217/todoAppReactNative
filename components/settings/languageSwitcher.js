@@ -13,7 +13,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import I18n from '../languages';
 import * as RNLocalize from "react-native-localize";
 
-class LanguageSwitcher extends PureComponent {
+import { AppContext } from '../../AppContext';
+
+class LanguageSwitcher extends PureComponent
+{
+    static contextType = AppContext;
+
 	state = {
         langScheme: 'zh',
         isAutoLang: false,
@@ -34,12 +39,15 @@ class LanguageSwitcher extends PureComponent {
             AsyncStorage.setItem('langScheme', langScheme);
         }
         AsyncStorage.setItem('isAutoLang', JSON.stringify(value));
-        this.props.screenProps.getData();
+        this.context.getData();
+        if (value) {
+            this.props.navigation.navigate('Setting');
+        }
         // this.forceUpdate();
     }
 
     //手动选择主题
-    manualSelectTheme(theme) 
+    manualSelectLanguage(theme) 
     {
         const langScheme = theme;
         this.setState({
@@ -47,7 +55,8 @@ class LanguageSwitcher extends PureComponent {
         });
         I18n.locale = langScheme;
         AsyncStorage.setItem('langScheme', langScheme);
-        this.props.screenProps.getData();
+        this.context.getData();
+        this.props.navigation.navigate('Setting');
         // this.forceUpdate();
     }
 
@@ -70,7 +79,7 @@ class LanguageSwitcher extends PureComponent {
 
 	render() {
         const { langScheme, isAutoLang } = this.state;
-        const { colorScheme } = this.props.screenProps;
+        const { colorScheme } = this.context;
         const langSchemeList = [
             {
                 title: '中文',
@@ -134,7 +143,7 @@ class LanguageSwitcher extends PureComponent {
                                 const { name, title } = theme;
                                 return (
                                     <TouchableOpacity
-                                        onPress={_this.manualSelectTheme.bind(_this, name)}
+                                        onPress={_this.manualSelectLanguage.bind(_this, name)}
                                         underlayColor="#efefef"
                                         key={name}
                                     >

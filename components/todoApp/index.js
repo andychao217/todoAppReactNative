@@ -6,7 +6,11 @@ import TextInput from './textInput';
 import SubmitButton from './SubmitButton';
 import TodoList from './todoList';
 
-class TodoApp extends PureComponent {
+import { AppContext } from '../../AppContext';
+
+class TodoApp extends PureComponent{
+	static contextType = AppContext;
+
 	state = {
 		inputValue: '',
 		todoList: [],
@@ -87,18 +91,27 @@ class TodoApp extends PureComponent {
 			console.log('Error from AsyncStorage: ', e);
 		}
 	}
-		
+	
 	componentDidMount() {
-		const { navigation } = this.props;
+		const { navigation, route } = this.props;
 		const _this = this;
 		_this.getData();
-		//监听tab页面切换事件
-		const didFocusSubscription = navigation.addListener(
-			'didFocus',
-			payload => {
-				_this.getData();
-			}
-		);
+		//监听tab页面切换完成加载事件
+		this._didFocusSubscription = navigation.addListener('focus', () => {
+			_this.getData();
+		});
+		//监听tab页面切换点击触发事件
+		this._tabPressSubscription = navigation.addListener('tabPress', (e) => {
+			e.preventDefault();
+			const routeName = route.name;
+			AsyncStorage.setItem('type', routeName);
+			navigation.navigate(routeName);
+		});
+	}
+
+	componentWillUnmount() {
+		this._didFocusSubscription();
+		this._tabPressSubscription();
 	}
 
 	render() {
@@ -107,7 +120,7 @@ class TodoApp extends PureComponent {
 			todoList,
 			type,
 		} = this.state;
-		const { colorScheme, langScheme } = this.props.screenProps;
+		const { colorScheme, langScheme } = this.context;
 		return (
 			<View
 				style={[

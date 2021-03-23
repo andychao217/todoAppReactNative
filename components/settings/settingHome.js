@@ -1,20 +1,23 @@
 import React, { PureComponent } from 'react';
 import {
 	View,
-	Appearance,
 	ScrollView,
 	StyleSheet,
 	TouchableOpacity,
 	Text
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import I18n from '../languages';
 
-export default class SettingHome extends PureComponent{
+import { AppContext } from '../../AppContext';
+
+export default class SettingHome extends PureComponent
+{
+	static contextType = AppContext;
+
 	render() {
 		const { navigation } = this.props;
-		const { colorScheme, langScheme } = this.props.screenProps;
+		const { colorScheme, langScheme } = this.context;
 		console.log('locale', langScheme);
 		I18n.locale = langScheme;
 		const settingList = [
