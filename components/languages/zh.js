@@ -11,4 +11,9 @@ export default {
     manually: '手动选择',
     darkMode: '深色模式',
     lightMode: '浅色模式',
+    backgroundImage: '壁纸',
+    cancel: '取消',
+    takePhoto: '拍照',
+    imageLibrary: '相册图片',
+    pickSourceHint: '请选择图片来源',
 };

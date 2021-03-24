@@ -9,6 +9,7 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-community/async-storage';
 import I18n from '../languages';
+import ImagePicker from './ImagePicker';
 
 import { AppContext } from '../../AppContext';
 
@@ -115,6 +116,7 @@ export default class SettingHome extends PureComponent
 						);
 					})
 				}
+				<ImagePicker />
 			</ScrollView>
 		);
 	}
