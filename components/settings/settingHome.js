@@ -116,7 +116,7 @@ export default class SettingHome extends PureComponent
 						);
 					})
 				}
-				<ImagePicker />
+				<ImagePicker {..._this.props} />
 			</ScrollView>
 		);
 	}

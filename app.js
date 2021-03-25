@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react';
-
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import {
+    NavigationContainer,
+    DefaultTheme,
+    DarkTheme
+} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -11,6 +14,7 @@ import TodoApp from './components/todoApp';
 import ThemeSwitcher from './components/settings/themeSwitcher';
 import SettingHome from './components/settings/settingHome';
 import LanguageSwitcher from './components/settings/languageSwitcher';
+import ImagePicker from './components/settings/ImagePicker';
 
 import I18n from './components/languages';
 import { Provider } from './AppContext';

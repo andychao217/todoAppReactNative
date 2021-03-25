@@ -1,5 +1,11 @@
 import React, { PureComponent } from 'react';
-import { View, ScrollView, StyleSheet, StatusBar } from 'react-native';
+import {
+	View,
+	ScrollView,
+	StyleSheet,
+	StatusBar,
+	ImageBackground,
+} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Heading from './heading';
 import TextInput from './textInput';
@@ -15,6 +21,7 @@ class TodoApp extends PureComponent{
 		inputValue: '',
 		todoList: [],
 		type: 'All',
+		backgroundImage: {},
 	};
 
 	//监听input框输入事件
@@ -79,16 +86,27 @@ class TodoApp extends PureComponent{
 	async getData() {
 		const _this = this;
 		try {
+			// 代办项目列表数据
 			let todoList = await AsyncStorage.getItem('todoList');
 			todoList = JSON.parse(todoList);
 			if (todoList && todoList.length) {
 				_this.setState({ todoList });
 			}
+			//页面类型 全部、进行中、已完成
 			const type = await AsyncStorage.getItem('type');
 			if (type) {
 				_this.setType(type);
 			} else {
 				_this.setType('All');
+			}
+			//背景壁纸
+			const backgroundImageUri = await AsyncStorage.getItem('backgroundImageUri');
+			if (backgroundImageUri) {
+				_this.setState({
+					backgroundImage: {
+						uri: backgroundImageUri,
+					}
+				});
 			}
 		} catch (e) {
 			console.log('Error from AsyncStorage: ', e);
@@ -122,6 +140,7 @@ class TodoApp extends PureComponent{
 			inputValue,
 			todoList,
 			type,
+			backgroundImage,
 		} = this.state;
 		const { colorScheme, langScheme } = this.context;
 		return (
@@ -131,38 +150,40 @@ class TodoApp extends PureComponent{
                     colorScheme !== 'dark' ? null : styles.darkBackground,
                 ]}
 			>
+				<ImageBackground source={backgroundImage} style={styles.image}>
+					<ScrollView
+						keyboardShouldPersistTaps="always"
+						style={styles.content}
+					>
+						<Heading theme={colorScheme} />
+						<TextInput
+							inputValue={inputValue}
+							inputChange={(text) => this.inputChange(text)}
+							theme={colorScheme}
+							langScheme={langScheme}
+						/>
+						<View style={{marginTop: 15}}>
+							<TodoList
+								todoList={todoList}
+								deleteTodo={this.deleteTodo.bind(this)}
+								toggleComplete={this.toggleComplete.bind(this)}
+								type={type}
+								theme={colorScheme}
+							/>
+							<SubmitButton
+								submitTodo={this.submitTodo.bind(this)}
+								disabled={!inputValue}
+								theme={colorScheme}
+								langScheme={langScheme}
+							/>
+						</View>
+					</ScrollView>
+				</ImageBackground>
 				<StatusBar
 					barStyle={
 						colorScheme !== 'dark' ? 'dark-content' : 'light-content'
 					}
 				/>
-				<ScrollView
-					keyboardShouldPersistTaps="always"
-					style={styles.content}
-				>
-					<Heading theme={colorScheme} />
-					<TextInput
-						inputValue={inputValue}
-						inputChange={(text) => this.inputChange(text)}
-						theme={colorScheme}
-						langScheme={langScheme}
-					/>
-					<View style={{marginTop: 15}}>
-						<TodoList
-							todoList={todoList}
-							deleteTodo={this.deleteTodo.bind(this)}
-							toggleComplete={this.toggleComplete.bind(this)}
-							type={type}
-							theme={colorScheme}
-						/>
-						<SubmitButton
-							submitTodo={this.submitTodo.bind(this)}
-							disabled={!inputValue}
-							theme={colorScheme}
-							langScheme={langScheme}
-						/>
-					</View>
-				</ScrollView>
 			</View>
 		);
 	}
@@ -172,6 +193,12 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#f5f5f5',
+	},
+	//背景图片
+	image: {
+		flex: 1,
+		resizeMode: "cover",
+		justifyContent: "center"
 	},
 	//暗色主题背景色
 	darkBackground: {
