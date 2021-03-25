@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		height: 50,
-		backgroundColor: '#fff',
+		backgroundColor: 'rgba(255,255,255,0.5)',
 		paddingLeft: 20,
 		paddingRight: 20,
 		width: 200,
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 	},
 	//暗色主题按钮背景色
 	darkButtonBg: {
-		backgroundColor: 'rgb(25,25,25)',
+		backgroundColor: 'rgba(25,25,25, 0.7)',
 	},
 	submitText: {
 		color: '#666',

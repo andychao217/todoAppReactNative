@@ -46,11 +46,11 @@ const styles = StyleSheet.create({
 	todoContainer: {
 		marginRight: 20,
 		marginLeft: 20,
-		backgroundColor: '#fff',
-		borderTopWidth: 1,
-		borderRightWidth: 1,
-		borderLeftWidth: 1,
-		borderColor: '#ededed',
+		backgroundColor: 'rgba(255,255,255,0.5)',
+		borderTopWidth: 0,
+		borderRightWidth: 0,
+		borderLeftWidth: 0,
+		borderColor: 'rgba(255,255,255,0.5)',
 		paddingLeft: 14,
 		paddingTop: 7,
 		paddingBottom: 7,
@@ -65,8 +65,8 @@ const styles = StyleSheet.create({
 	},
 	//暗色主题todo项目背景、边框颜色
 	todoDarkColor: {
-		backgroundColor: 'rgb(53,56,59)',
-		borderColor: 'rgb(25,25,25)',
+		backgroundColor: 'rgba(53,56,59,0.7)',
+		borderColor: 'rgba(25,25,25,0.7)',
 	},
 	todoText: {
 		fontSize: 17,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
 	},
 	//暗色主题todo项目文字颜色
 	darkTodoTextColor: {
-		color: 'rgb(149,149,149)',
+		color: 'rgba(255,255,255,0.7)',
 	},
 	buttons: {
 		flex: 1,

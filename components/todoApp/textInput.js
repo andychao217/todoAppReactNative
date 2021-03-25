@@ -15,7 +15,7 @@ const Input = ({ inputValue, inputChange, theme, langScheme }) => {
 					theme !== 'dark' ? null : styles.darkBgColor,
 				]}
 				placeholder={I18n.t('todoPlaceholder')}
-				placeholderTextColor={theme !== 'dark' ? '#CACACA' : 'rgb(149,149,149)'}
+				placeholderTextColor={theme !== 'dark' ? 'rgba(0,0,0,0.7)' : 'rgb(149,149,149)'}
 				selectionColor="orangered"
 			/>
 		</View>
@@ -36,14 +36,14 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		height: 60,
-		backgroundColor: '#fff',
+		backgroundColor: 'rgba(255,255,255,0.5)',
 		paddingLeft: 10,
 		paddingRight: 10,
 		borderRadius: 5,
 	},
 	//暗色主题输入框背景色
 	darkBgColor: {
-		backgroundColor: 'rgb(47,54,61)',
+		backgroundColor: 'rgba(47,54,61, 0.7)',
 	}
 });
 

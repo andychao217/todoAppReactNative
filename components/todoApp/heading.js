@@ -25,12 +25,12 @@ const styles = StyleSheet.create({
 	headerText: {
 		textAlign: 'center',
 		fontSize: 70,
-		color: 'rgba(175, 47, 47, 0.25)',
+		color: 'rgba(175, 47, 47, 0.7)',
 		fontWeight: '200',
 	},
 	//暗色主题logo文字颜色
 	darkTextColor: {
-		color: 'rgba(241,73,94, 1.0)',
+		color: 'rgba(241,73,94, 0.7)',
 	},
 });
 
