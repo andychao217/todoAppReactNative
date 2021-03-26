@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import {
 	View,
-	ScrollView,
 	StyleSheet,
 	StatusBar,
 	ImageBackground,
@@ -21,7 +20,6 @@ class TodoApp extends PureComponent{
 		inputValue: '',
 		todoList: [],
 		type: 'All',
-		backgroundImage: {},
 	};
 
 	//监听input框输入事件
@@ -99,15 +97,6 @@ class TodoApp extends PureComponent{
 			} else {
 				_this.setType('All');
 			}
-			//背景壁纸
-			const backgroundImageUri = await AsyncStorage.getItem('backgroundImageUri');
-			if (backgroundImageUri) {
-				_this.setState({
-					backgroundImage: {
-						uri: backgroundImageUri,
-					}
-				});
-			}
 		} catch (e) {
 			console.log('Error from AsyncStorage: ', e);
 		}
@@ -140,9 +129,12 @@ class TodoApp extends PureComponent{
 			inputValue,
 			todoList,
 			type,
-			backgroundImage,
 		} = this.state;
-		const { colorScheme, langScheme } = this.context;
+		const {
+			colorScheme,
+			langScheme,
+			backgroundImage
+		} = this.context;
 		return (
 			<View
 				style={[
@@ -151,10 +143,7 @@ class TodoApp extends PureComponent{
                 ]}
 			>
 				<ImageBackground source={backgroundImage} style={styles.image}>
-					<ScrollView
-						keyboardShouldPersistTaps="always"
-						style={styles.content}
-					>
+					<View style={styles.headerContainer}>
 						<Heading theme={colorScheme} />
 						<TextInput
 							inputValue={inputValue}
@@ -162,22 +151,23 @@ class TodoApp extends PureComponent{
 							theme={colorScheme}
 							langScheme={langScheme}
 						/>
-						<View style={{marginTop: 15}}>
-							<TodoList
-								todoList={todoList}
-								deleteTodo={this.deleteTodo.bind(this)}
-								toggleComplete={this.toggleComplete.bind(this)}
-								type={type}
-								theme={colorScheme}
-							/>
-							<SubmitButton
-								submitTodo={this.submitTodo.bind(this)}
-								disabled={!inputValue}
-								theme={colorScheme}
-								langScheme={langScheme}
-							/>
-						</View>
-					</ScrollView>
+						<SubmitButton
+							submitTodo={this.submitTodo.bind(this)}
+							disabled={!inputValue}
+							theme={colorScheme}
+							langScheme={langScheme}
+						/>
+					</View>
+					<View style={{marginTop: 40, flex: 2}}>
+						<TodoList
+							todoList={todoList}
+							deleteTodo={this.deleteTodo.bind(this)}
+							toggleComplete={this.toggleComplete.bind(this)}
+							type={type}
+							theme={colorScheme}
+						/>
+					</View>
+					{/* </ScrollView> */}
 				</ImageBackground>
 				<StatusBar
 					barStyle={
@@ -194,6 +184,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#f5f5f5',
 	},
+	headerContainer: {
+		flex: 1,
+	},	
 	//背景图片
 	image: {
 		flex: 1,

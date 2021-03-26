@@ -119,25 +119,29 @@ export default class App extends PureComponent {
         colorScheme: 'dark', //主题配置
         langScheme: 'en', //语言配置
         activeItemNumber: 0, //进行中项目数量
+        backgroundImage: {},
     };
 
     //获取todoList、colorScheme数据
     async getData() {
         const _this = this;
         try {
+            //主题配色
             const colorScheme = await AsyncStorage.getItem('colorScheme');
-            const langScheme = await AsyncStorage.getItem('langScheme');
             if (colorScheme) {
                 _this.setState({
                     colorScheme,
                 });
             }
+            //语言设置
+            const langScheme = await AsyncStorage.getItem('langScheme');
             if (langScheme) {
                 I18n.locale = langScheme;
                 _this.setState({
                     langScheme,
                 });
             }
+            //进行中项目数
             let todoList = JSON.parse(await AsyncStorage.getItem('todoList'));
             if (todoList && todoList.length) {
                 todoList = todoList.filter(r => !r.complete);
@@ -146,6 +150,16 @@ export default class App extends PureComponent {
             _this.setState({
                 activeItemNumber
             });
+
+            //背景壁纸
+			const backgroundImageUri = await AsyncStorage.getItem('backgroundImageUri');
+			if (backgroundImageUri) {
+				_this.setState({
+					backgroundImage: {
+						uri: backgroundImageUri,
+					}
+				});
+			}
         } catch (e) {
             console.log('Error from AsyncStorage: ', e);
         }
